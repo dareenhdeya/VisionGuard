@@ -1,60 +1,66 @@
 # VisionGuard – API & Demo
 
- The final model used here is `yolo26s_exp1` (`best.pt`), with `imgsz=640`.
+The final model used here is `yolo26s_exp1` (`best.pt`), with `imgsz=640`.
 
- ### Classes
+### Classes
 
- - Person
+- Person
 - Hardhat
 - NO-Hardhat
 - Safety Vest
 - NO-Safety Vest
 
- ## Files
+## Files
 
- - `main.py` — FastAPI service with image and video endpoints
+- `main.py` — FastAPI service with image and video endpoints
 - `compliance.py` — Logic for converting detections into a `COMPLIANT` / `VIOLATION` decision
 - `streamlit_app.py` — Simple UI that communicates with the API
 - `weights/best.pt` — Trained model weights (`yolo26s_exp1`)
 - `requirements.txt`
 
- ## Local Setup
+## Sample Images & Videos
 
- ### 1\. Install the dependencies
+The `images & videos/` folder contains sample files for testing the trained model's inference on images and videos through the Streamlit UI.
+
+These files can be uploaded through the interface to demonstrate PPE detection and compliance violation identification.
+
+## Local Setup
+
+### 1\. Install the dependencies
 
 ```
 pip install -r requirements.txt
 ```
 
- ### 2\. Start the API
+### 2\. Start the API
 
- Keep this terminal open:
+Keep this terminal open:
 
 ```
 uvicorn main:app --reload
 ```
 
- Once the server is running, open:
+Once the server is running, open:
 
- `http://127.0.0.1:8000/docs`
+`http://127.0.0.1:8000/docs`
 
- You will see the automatically generated API documentation, including all available endpoints.
+You will see the automatically generated API documentation, including all available endpoints.
 
- ### 3\. Start the Streamlit UI
+### 3\. Start the Streamlit UI
 
- Open a second terminal and run:
+Open a second terminal and run:
 
 ```
 streamlit run streamlit_app.py
 ```
 
- The interface will open in your browser, where you can upload an image or video and view the results.
+The interface will open in your browser, where you can upload an image or video and view the results.
 
- ## Endpoints
+## Endpoints
 
- ### `POST /predict/image`
+### `POST /predict/image`
 
- - **Parameter:** Image file (`file`)
+- **Parameter:** Image file (`file`)
 - **Optional parameter:** `conf` — confidence threshold, default is `0.25`
 - **Returns:**
   - List of detections
@@ -62,9 +68,9 @@ streamlit run streamlit_app.py
   - Processing time
   - Annotated image with bounding boxes encoded as Base64
 
- ### `POST /predict/video`
+### `POST /predict/video`
 
- - **Parameter:** Video file (`file`)
+- **Parameter:** Video file (`file`)
 - **Optional parameters:**
   - `conf`
   - `frame_skip`
@@ -73,8 +79,8 @@ streamlit run streamlit_app.py
   - Number of frames containing violations
   - Results for each analyzed frame
 
- ## Video Processing Note
+## Video Processing Note
 
- The video endpoint processes the video **after it has been uploaded**, rather than in real time. This batch-processing approach is sufficient for the project requirements.
+The video endpoint processes the video **after it has been uploaded**, rather than in real time. This batch-processing approach is sufficient for the project requirements.
 
- Processing every frame is not practical on a typical computer, so the system analyzes a sample of frames instead, based on the selected `frame_skip` value.
+Processing every frame is not practical on a typical computer, so the system analyzes a sample of frames instead, based on the selected `frame_skip` value.
